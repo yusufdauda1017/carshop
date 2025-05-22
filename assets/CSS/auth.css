@@ -1,0 +1,168 @@
+    :root {
+      --primary: #E30613;
+      --secondary: #2D3640;
+      --light: #F8F9FA;
+      --border: #E0E0E0;
+      --radius: 8px;
+      --shadow: 0 8px 24px rgba(0,0,0,0.08);
+      --error: #dc3545;
+      --success: #28a745;
+      --primary-hover: #e34019;
+      --dark: #1a1a1a;
+      --medium-gray: #767F7E;
+      --light-gray: #e9ecef;
+      --white: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background: url('https://images.unsplash.com/photo-1485291571150-772bcfc10da5') center/cover fixed;
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .header {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+    }
+
+    .company-logo {
+      color: var(--primary);
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .auth-container {
+      background: rgba(255,255,255,0.98);
+      backdrop-filter: blur(10px);
+      width: 100%;
+      max-width: 800px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 3rem;
+      animation: fadeIn 0.5s ease;
+margin-top: 3rem;
+
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .auth-header h1 {
+      font-size: 2rem;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .auth-header p {
+      color: var(--medium-gray);
+      font-size: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .floating-label {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+
+    .form-input:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(227,6,19,0.1);
+    }
+
+    .form-input.error {
+      border-color: var(--error);
+    }
+
+    .error-message {
+      color: var(--error);
+      font-size: 0.8rem;
+      margin-top: 0.25rem;
+      display: none;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 1.25rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+      font-size: 1rem;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(227,6,19,0.2);
+    }
+
+    .submit-btn:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 2rem;
+      color: var(--medium-gray);
+      font-size: 0.9rem;
+    }
+
+    .auth-footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .auth-footer a:hover {
+      text-decoration: underline;
+    }
+
+    .auth-footer p {
+      margin: 0.5rem 0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .auth-container {
+        padding: 2rem;
+      }
+    }
