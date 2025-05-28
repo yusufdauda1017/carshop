@@ -10,7 +10,7 @@ function setupEventListeners() {
 
   document.querySelectorAll('.social-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
-      alert('Social login coming soon!');
+      showToast('info', 'Social login coming soon!');
     });
   });
 
@@ -29,6 +29,60 @@ function setupEventListeners() {
       }
     });
   }
+}
+
+function showToast(type, message) {
+  const toastContainer = document.getElementById('toastContainer') || createToastContainer();
+  const toastId = 'toast-' + Date.now();
+  const iconClass = type === 'success' ? 'fa-check-circle' :
+                   type === 'danger' ? 'fa-exclamation-circle' :
+                   type === 'info' ? 'fa-info-circle' : 'fa-bell';
+
+  const toast = document.createElement('div');
+  toast.id = toastId;
+  toast.className = `custom-toast show ${type}`;
+  toast.setAttribute('role', 'alert');
+  toast.setAttribute('aria-live', 'polite');
+  toast.setAttribute('aria-atomic', 'true');
+
+  toast.innerHTML = `
+    <div class="toast-content">
+      <i class="fas ${iconClass}"></i>
+      <span class="toast-message">${message}</span>
+      <button type="button" class="toast-close" aria-label="Close">
+        &times;
+      </button>
+    </div>
+  `;
+
+  toastContainer.appendChild(toast);
+
+  // Auto-dismiss after 5 seconds
+  const autoDismiss = setTimeout(() => {
+    dismissToast(toastId);
+  }, 5000);
+
+  // Manual dismissal
+  toast.querySelector('.toast-close').addEventListener('click', () => {
+    clearTimeout(autoDismiss);
+    dismissToast(toastId);
+  });
+}
+
+function dismissToast(toastId) {
+  const toast = document.getElementById(toastId);
+  if (toast) {
+    toast.classList.add('hide');
+    setTimeout(() => toast.remove(), 300);
+  }
+}
+
+function createToastContainer() {
+  const container = document.createElement('div');
+  container.id = 'toastContainer';
+  container.className = 'custom-toast-container';
+  document.body.appendChild(container);
+  return container;
 }
 
 function togglePasswordVisibility(inputId, toggleElement) {
@@ -103,7 +157,7 @@ async function handleLogin(e) {
   // Validate reCAPTCHA
   const recaptchaResponse = grecaptcha.getResponse();
   if (!recaptchaResponse) {
-    alert('Please complete the reCAPTCHA');
+    showToast('danger', 'Please complete the reCAPTCHA');
     isValid = false;
   }
 
@@ -120,7 +174,7 @@ async function handleLogin(e) {
     formData.append('password', password.value.trim());
     formData.append('recaptcha_response', recaptchaResponse);
 
-    const response = await fetch('./loginlogic.php', {
+    const response = await fetch('./include/loginLogic.php', {
       method: 'POST',
       body: formData,
     });
@@ -128,18 +182,22 @@ async function handleLogin(e) {
     const data = await response.json();
 
     if (response.ok && data.success) {
-      alert('Login successful!');
-      // window.location.href = '/dashboard';
+      showToast('success', 'Login successful!');
+      setTimeout(() => {
+        window.location.href = data.redirect || '/dashboard';
+      }, 1500);
     } else {
+      showToast('danger', data.message || 'Invalid email or password');
       showError(password, passwordError, data.message || 'Invalid email or password');
     }
 
   } catch (error) {
     console.error('Login error:', error);
+    showToast('danger', 'Server error occurred. Please try again.');
     showError(password, passwordError, 'Server error occurred');
   } finally {
     submitBtn.disabled = false;
     submitBtn.innerHTML = originalText;
-    grecaptcha.reset(); // Reset reCAPTCHA for retry
+    grecaptcha.reset();
   }
 }

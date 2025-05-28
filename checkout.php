@@ -1,3 +1,8 @@
+<?php
+session_start();
+$car_id = $_GET['car_id'] ?? '';
+$redirect_url = $_GET['redirect'] ?? './checkout.php?car_id='.$car_id;
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -458,14 +463,14 @@
       </div>
     </section>
 
-    <!-- Checkout Main Content -->
-    <main class="section">
-      <div class="container">
-        <div id="checkoutContent">
-          <!-- Content will be loaded by JavaScript based on car ID -->
-        </div>
-      </div>
-    </main>
+   <!-- Checkout Main Content -->
+<main class="section">
+  <div class="container">
+    <div id="checkoutContent">
+      <!-- Content will be loaded by JavaScript based on car ID and auth status -->
+    </div>
+  </div>
+</main>
 
     <!-- Footer -->
     <footer class="footer">
@@ -547,179 +552,246 @@
       </div>
     </footer>
 
-    <script>
-      // Sample car data (in a real app, this would come from your backend)
-      const carDetails = {
-        "bmw-7-series": {
-          title: "BMW 7 Series",
-          year: "2023",
-          price: "₦68,900",
-          image: "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-          specs: [
-            { label: "Make", value: "BMW" },
-            { label: "Model", value: "7 Series" },
-            { label: "Year", value: "2023" },
-            { label: "Mileage", value: "12,000 miles" },
-            { label: "Transmission", value: "Automatic" },
-            { label: "Engine", value: "3.0L Turbocharged I6" },
-            { label: "Horsepower", value: "335 HP" },
-            { label: "MPG", value: "22 City / 29 Highway" },
-          ],
-        },
-        "porsche-911": {
-          title: "Porsche 911",
-          year: "2022",
-          price: "₦112,500",
-          image: "https://images.unsplash.com/photo-1493238792000-8113da705763?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-          specs: [
-            { label: "Make", value: "Porsche" },
-            { label: "Model", value: "911 Carrera S" },
-            { label: "Year", value: "2022" },
-            { label: "Mileage", value: "8,000 miles" },
-            { label: "Transmission", value: "8-Speed PDK Automatic" },
-            { label: "Engine", value: "3.0L Twin-Turbo Flat-6" },
-            { label: "Horsepower", value: "443 HP" },
-            { label: "MPG", value: "18 City / 24 Highway" },
-          ],
-        },
-        // Add other car details as needed
-      };
+   <script>
+  // Function to get URL parameter
+  function getUrlParameter(name) {
+    name = name.replace(/[[]/, '\\[').replace(/[\]]/, '\\]');
+    const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    const results = regex.exec(location.search);
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+  }
 
-      // Function to get URL parameter
-      function getUrlParameter(name) {
-        name = name.replace(/[[]/, '\\[').replace(/[\]]/, '\\]');
-        const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-        const results = regex.exec(location.search);
-        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-      }
+  // Function to fetch car details from backend
+  async function fetchCarDetails(carId) {
+    try {
+      const response = await fetch(`./get_car_details.php?car_id=${carId}`);
+      if (!response.ok) throw new Error('Network error');
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching car details:', error);
+      return null;
+    }
+  }
 
-      // Function to render checkout content based on car ID
-      function renderCheckoutContent() {
-        const checkoutContent = document.getElementById('checkoutContent');
-        const carId = getUrlParameter('car');
-        const car = carDetails[carId];
+  // Function to render checkout content based on car ID and auth status
+  async function renderCheckoutContent() {
+    const checkoutContent = document.getElementById('checkoutContent');
+    const carId = getUrlParameter('car_id');
 
-        if (!car) {
-          // Car not found
-          checkoutContent.innerHTML = `
-            <div style="text-align: center; padding: 2rem;">
-              <h2 style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--primary);">Vehicle Not Found</h2>
-              <p style="margin-bottom: 1.5rem; color: var(--medium-gray);">The vehicle you're trying to purchase could not be found.</p>
-              <a href="inventory.html" class="btn btn-primary">Browse Inventory</a>
+    if (!carId) {
+      renderError("No vehicle selected");
+      return;
+    }
+
+    // Show loading state
+    checkoutContent.innerHTML = `
+      <div class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i> Loading vehicle details...
+      </div>
+    `;
+
+    // Check authentication status
+    const authResponse = await fetch('./check_auth.php');
+    const authData = await authResponse.json();
+    const isAuthenticated = authData.authenticated;
+
+    // Get car details
+    const car = await fetchCarDetails(carId);
+
+    if (!car) {
+      renderError("Vehicle not found");
+      return;
+    }
+
+    // Render appropriate content based on auth status
+    if (isAuthenticated) {
+      renderCheckoutForm(car);
+    } else {
+      renderAuthPrompt(car);
+    }
+  }
+
+  // Render checkout form for authenticated users
+  function renderCheckoutForm(car) {
+    const checkoutContent = document.getElementById('checkoutContent');
+
+    checkoutContent.innerHTML = `
+      <div class="checkout-container">
+        <div class="car-summary">
+          <h2 class="car-summary-title">Your Vehicle</h2>
+          <div class="car-summary-img">
+            <img src="${car.image_url}" alt="${car.make} ${car.model}">
+          </div>
+
+          <div class="car-summary-specs">
+            <div class="car-summary-spec">
+              <span>Make</span>
+              <span>${car.make}</span>
             </div>
-          `;
-          return;
-        }
-
-        // Show checkout form (no login required)
-        checkoutContent.innerHTML = `
-          <div class="checkout-container">
-            <div class="car-summary">
-              <h2 class="car-summary-title">Your Vehicle</h2>
-              <div class="car-summary-img">
-                <img src="${car.image}" alt="${car.title}">
-              </div>
-
-              <div class="car-summary-specs">
-                ${car.specs.map(spec => `
-                  <div class="car-summary-spec">
-                    <span>${spec.label}</span>
-                    <span>${spec.value}</span>
-                  </div>
-                `).join('')}
-              </div>
-
-              <div class="car-summary-price">${car.price}</div>
+            <div class="car-summary-spec">
+              <span>Model</span>
+              <span>${car.model}</span>
             </div>
-
-            <div class="checkout-form">
-              <h2 class="checkout-title">Payment Information</h2>
-
-              <form id="paymentForm">
-                <div class="form-row">
-                  <div class="form-group">
-                    <label class="form-label">First Name</label>
-                    <input type="text" class="form-control" required>
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">Last Name</label>
-                    <input type="text" class="form-control" required>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label class="form-label">Email</label>
-                    <input type="email" class="form-control" required>
-                </div>
-
-                <div class="form-group">
-                  <label class="form-label">Phone Number</label>
-                  <input type="tel" class="form-control" required>
-                </div>
-
-                <div class="form-group">
-                  <label class="form-label">Address</label>
-                  <input type="text" class="form-control" required>
-                </div>
-
-                <div class="form-row">
-                  <div class="form-group">
-                    <label class="form-label">City</label>
-                    <input type="text" class="form-control" required>
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">ZIP Code</label>
-                    <input type="text" class="form-control" required>
-                  </div>
-                </div>
-
-                <h3 style="margin: 2rem 0 1rem; font-size: 1.2rem;">Payment Method</h3>
-
-                <div class="form-group">
-                  <label class="form-label">Card Number</label>
-                  <input type="text" class="form-control" placeholder="1234 5678 9012 3456" required>
-                </div>
-
-                <div class="form-row">
-                  <div class="form-group">
-                    <label class="form-label">Expiration Date</label>
-                    <input type="text" class="form-control" placeholder="MM/YY" required>
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">CVV</label>
-                    <input type="text" class="form-control" placeholder="123" required>
-                  </div>
-                </div>
-
-                <div class="form-actions">
-                  <button type="submit" class="btn btn-primary" style="width: 100%;">Complete Purchase</button>
-                </div>
-              </form>
+            <div class="car-summary-spec">
+              <span>Year</span>
+              <span>${car.year}</span>
+            </div>
+            <div class="car-summary-spec">
+              <span>Price</span>
+              <span>₦${parseFloat(car.price).toLocaleString()}</span>
             </div>
           </div>
-        `;
+        </div>
 
-        // Add form submission handler
-        document.getElementById('paymentForm')?.addEventListener('submit', function(e) {
-          e.preventDefault();
-          // In a real app, you would process the payment here
-          alert('Purchase completed successfully!');
-          // Redirect to confirmation page
-          window.location.href = 'comfirmation.php';
-        });
-      }
+        <div class="checkout-form">
+          <h2 class="checkout-title">Payment Information</h2>
 
-      // Initialize the page when loaded
-      document.addEventListener('DOMContentLoaded', function() {
-        // Render the checkout content
-        renderCheckoutContent();
-        
-        // Handle auth button click (optional, if you still want this functionality)
-        document.getElementById('authButton')?.addEventListener('click', function(e) {
-          e.preventDefault();
-          window.location.href = 'login.html';
-        });
-      });
-    </script>
+          <form id="paymentForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">First Name</label>
+                <input type="text" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Last Name</label>
+                <input type="text" class="form-control" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Phone Number</label>
+              <input type="tel" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Address</label>
+              <input type="text" class="form-control" required>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">City</label>
+                <input type="text" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">ZIP Code</label>
+                <input type="text" class="form-control" required>
+              </div>
+            </div>
+
+            <h3 style="margin: 2rem 0 1rem; font-size: 1.2rem;">Payment Method</h3>
+
+            <div class="form-group">
+              <label class="form-label">Card Number</label>
+              <input type="text" class="form-control" placeholder="1234 5678 9012 3456" required>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Expiration Date</label>
+                <input type="text" class="form-control" placeholder="MM/YY" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">CVV</label>
+                <input type="text" class="form-control" placeholder="123" required>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary" style="width: 100%;">Complete Purchase</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    `;
+
+    // Add form submission handler
+    document.getElementById('paymentForm')?.addEventListener('submit', function(e) {
+      e.preventDefault();
+      processPayment(car.id);
+    });
+  }
+
+  // Render authentication prompt for unauthenticated users
+  function renderAuthPrompt(car) {
+    const checkoutContent = document.getElementById('checkoutContent');
+    const redirectUrl = encodeURIComponent(window.location.href);
+
+    checkoutContent.innerHTML = `
+      <div class="auth-prompt">
+        <div class="car-preview">
+          <img src="${car.image_url}" alt="${car.make} ${car.model}">
+          <div class="car-info">
+            <h3>${car.make} ${car.model} ${car.year}</h3>
+            <p class="price">₦${parseFloat(car.price).toLocaleString()}</p>
+          </div>
+        </div>
+
+        <div class="auth-options">
+          <h2>Complete Your Purchase</h2>
+          <p>Please sign in or register to continue with your purchase</p>
+
+          <div class="auth-buttons">
+            <a href="./login.php?redirect=${redirectUrl}" class="btn btn-primary">
+              <i class="fas fa-sign-in-alt"></i> Sign In
+            </a>
+            <a href="./register.php?redirect=${redirectUrl}" class="btn btn-secondary">
+              <i class="fas fa-user-plus"></i> Register
+            </a>
+            <a href="./checkout.php?car_id=${car.id}&guest=true" class="btn btn-outline">
+              <i class="fas fa-shopping-cart"></i> Continue as Guest
+            </a>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Render error message
+  function renderError(message) {
+    const checkoutContent = document.getElementById('checkoutContent');
+    checkoutContent.innerHTML = `
+      <div class="error-message">
+        <i class="fas fa-exclamation-circle"></i>
+        <h3>${message}</h3>
+        <a href="./inventory.php" class="btn btn-primary">Browse Inventory</a>
+      </div>
+    `;
+  }
+
+  // Process payment (example implementation)
+  function processPayment(carId) {
+    const form = document.getElementById('paymentForm');
+    const submitBtn = form.querySelector('button[type="submit"]');
+
+    // Disable button during processing
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+    // Simulate payment processing
+    setTimeout(() => {
+      // In a real app, you would submit to your payment processor here
+      window.location.href = './confirmation.php?car_id=' + carId;
+    }, 1500);
+  }
+
+  // Initialize the page when loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    // Check if this is a guest checkout
+    const isGuestCheckout = getUrlParameter('guest') === 'true';
+
+    if (isGuestCheckout) {
+      renderCheckoutContent();
+    } else {
+      // Normal flow with auth check
+      renderCheckoutContent();
+    }
+  });
+</script>
   </body>
 </html>

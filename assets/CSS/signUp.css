@@ -194,12 +194,13 @@ margin-top: 3rem;
 .form-input {
   width: 100%;
   padding: 1rem;
+  padding-right: 2.5rem; /* Space for toggle icon */
   border: 2px solid var(--border);
   border-radius: var(--radius);
   transition: all 0.3s ease;
   font-size: 1rem;
-
 }
+
 
 
 
@@ -226,17 +227,30 @@ margin-top: 3rem;
 }
 
 .password-toggle {
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
+ position: absolute;
+  right: 12px;
+  top: 30%;
+  transform: translateY(-30%);
   cursor: pointer;
   color: var(--medium-gray);
   transition: color 0.2s;
+  z-index: 2;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  padding: 0;
 }
 
 .password-toggle:hover {
   color: var(--primary);
+}
+
+.password-toggle i {
+  font-size: 1.1rem;
 }
 
 .password-strength-meter {
@@ -403,6 +417,80 @@ margin-top: 3rem;
   text-decoration: underline;
 }
 
+
+
+.custom-toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    max-width: 350px;
+    width: 100%;
+}
+
+.custom-toast {
+    position: relative;
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.custom-toast.hide {
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+.custom-toast.success {
+    background-color: #28a745;
+}
+
+.custom-toast.danger {
+    background-color: #dc3545;
+}
+
+.custom-toast.info {
+    background-color: #17a2b8;
+}
+
+.custom-toast.warning {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.toast-content {
+    display: flex;
+    align-items: center;
+}
+
+.toast-content i {
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+.toast-message {
+    flex-grow: 1;
+}
+
+.toast-close {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 10px;
+    line-height: 1;
+}
+
+.warning .toast-close {
+    color: #212529;
+}
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }

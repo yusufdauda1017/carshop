@@ -45,14 +45,14 @@
       </div>
 
       <div class="form-group">
-        <div class="floating-label password-container">
-          <input type="password" class="form-input" placeholder="Enter your password" id="loginPassword" required>
-          <label for="loginPassword">Password</label>
-          <span class="password-toggle" onclick="togglePasswordVisibility('loginPassword', this)">
-            <i class="fas fa-eye"></i>
-          </span>
-          <div class="error-message" id="passwordError"></div>
-        </div>
+       <div class="floating-label password-container">
+  <input type="password" class="form-input" placeholder="Enter your password" id="loginPassword" required>
+  <label for="loginPassword">Password</label>
+  <span class="password-toggle" onclick="togglePasswordVisibility('loginPassword', this)">
+    <i class="fas fa-eye"></i>
+  </span>
+  <div class="error-message" id="passwordError"></div>
+</div>
         <div class="forgot-password">
           <a href="./forgotpass.php">Forgot password?</a>
         </div>

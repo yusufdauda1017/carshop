@@ -9,6 +9,64 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ======================
+// TOAST NOTIFICATION SYSTEM
+// ======================
+
+function showToast(type, message) {
+    const toastContainer = document.getElementById('toastContainer') || createToastContainer();
+    const toastId = 'toast-' + Date.now();
+    const iconClass = type === 'success' ? 'fa-check-circle' :
+                     type === 'danger' ? 'fa-exclamation-circle' :
+                     type === 'info' ? 'fa-info-circle' : 'fa-bell';
+
+    const toast = document.createElement('div');
+    toast.id = toastId;
+    toast.className = `custom-toast show ${type}`;
+    toast.setAttribute('role', 'alert');
+    toast.setAttribute('aria-live', 'polite');
+    toast.setAttribute('aria-atomic', 'true');
+
+    toast.innerHTML = `
+        <div class="toast-content">
+            <i class="fas ${iconClass}"></i>
+            <span class="toast-message">${message}</span>
+            <button type="button" class="toast-close" aria-label="Close">
+                &times;
+            </button>
+        </div>
+    `;
+
+    toastContainer.appendChild(toast);
+
+    // Auto-dismiss after 5 seconds
+    const autoDismiss = setTimeout(() => {
+        dismissToast(toastId);
+    }, 5000);
+
+    // Manual dismissal
+    toast.querySelector('.toast-close').addEventListener('click', () => {
+        clearTimeout(autoDismiss);
+        dismissToast(toastId);
+    });
+}
+
+function dismissToast(toastId) {
+    const toast = document.getElementById(toastId);
+    if (toast) {
+        toast.classList.add('hide');
+        setTimeout(() => toast.remove(), 300);
+    }
+}
+
+function createToastContainer() {
+    const container = document.createElement('div');
+    container.id = 'toastContainer';
+    container.className = 'custom-toast-container';
+    document.body.appendChild(container);
+    return container;
+}
+
+// ======================
 // STEP NAVIGATION FUNCTIONS
 // ======================
 
@@ -217,10 +275,12 @@ function validateStep4() {
     }
 
     // Validate reCAPTCHA
-    const recaptchaResponse = grecaptcha.getResponse();
-    if (!recaptchaResponse) {
-        alert('Please complete the verification');
-        isValid = false;
+    if (typeof grecaptcha !== 'undefined') {
+        const recaptchaResponse = grecaptcha.getResponse();
+        if (!recaptchaResponse) {
+            showToast('danger', 'Please complete the verification');
+            isValid = false;
+        }
     }
 
     return isValid;
@@ -350,7 +410,7 @@ function formatPhoneNumber() {
 }
 
 function saveFormData() {
-    return {
+    formData = {
         email: document.getElementById('email').value,
         fullName: document.getElementById('fullName')?.value,
         password: document.getElementById('password')?.value,
@@ -361,6 +421,7 @@ function saveFormData() {
         country: document.getElementById('country')?.value,
         state: document.getElementById('state')?.value
     };
+    return formData;
 }
 
 // ======================
@@ -543,7 +604,10 @@ function setupEventListeners() {
     // Close dropdown when clicking outside
     document.addEventListener('click', function(e) {
         if (!e.target.closest('.custom-select')) {
-            document.getElementById('optionsList').style.display = 'none';
+            const optionsList = document.getElementById('optionsList');
+            if (optionsList) {
+                optionsList.style.display = 'none';
+            }
         }
     });
 
@@ -565,7 +629,11 @@ async function validateAndSubmitForm() {
     if (!validateStep4()) return;
 
     const formData = saveFormData(); // Get form data
-    const recaptchaResponse = grecaptcha.getResponse();
+    let recaptchaResponse = '';
+
+    if (typeof grecaptcha !== 'undefined') {
+        recaptchaResponse = grecaptcha.getResponse();
+    }
 
     const submitBtn = document.querySelector('#step4 .submit-btn');
     const originalText = submitBtn.textContent;
@@ -573,7 +641,7 @@ async function validateAndSubmitForm() {
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
 
     try {
-        const response = await fetch('submit_form.php', {
+        const response = await fetch('./include/register_logic.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -587,20 +655,27 @@ async function validateAndSubmitForm() {
         const result = await response.json();
 
         if (result.success) {
-            alert('Registration successful!');
+            showToast('success', result.message || 'Registration successful!');
+            // Redirect after 2 seconds to allow user to see the success message
+            setTimeout(() => {
+                window.location.href = result.redirect || 'dashboard.php';
+            }, 2000);
         } else {
-            alert('Registration failed: ' + result.message);
+            showToast('danger', result.message || 'An error occurred during registration');
+            if (typeof grecaptcha !== 'undefined') {
+                grecaptcha.reset();
+            }
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
         }
-
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalText;
     } catch (error) {
         console.error('Error:', error);
-        alert('Registration error. Please try again.');
+        showToast('danger', 'An error occurred. Please try again.');
+        if (typeof grecaptcha !== 'undefined') {
+            grecaptcha.reset();
+        }
         submitBtn.disabled = false;
         submitBtn.textContent = originalText;
-    } finally {
-        grecaptcha.reset();
     }
 }
 

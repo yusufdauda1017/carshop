@@ -15,7 +15,7 @@
         </button>
         <div class="header-title">
             <i class="fas fa-car" aria-hidden="true"></i>
-            <span>My Car Orders</span>
+            <a href="#" class="logo">CAR<span>SHOP</span></a>
         </div>
         <div class="header-controls">
             <div class="notification-bell">

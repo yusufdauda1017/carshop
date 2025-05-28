@@ -202,6 +202,7 @@
     </div>
   </div>
 
+
   <script src="./assets/JAVASCRIPT/signup.js"></script>
 </body>
 </html>

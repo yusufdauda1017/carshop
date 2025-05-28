@@ -1195,47 +1195,24 @@
         </div>
         <div class="modal-body">
           <h4>Vehicle Type</h4>
-          <div style="margin-bottom: 1.5rem">
-            <label style="display: block; margin-bottom: 0.5rem">
-              <input
-                type="checkbox"
-                name="vehicle-type"
-                value="sedan"
-                checked
-              />
-              Sedan
-            </label>
-            <label style="display: block; margin-bottom: 0.5rem">
-              <input type="checkbox" name="vehicle-type" value="suv" checked />
-              SUV
-            </label>
-            <label style="display: block; margin-bottom: 0.5rem">
-              <input
-                type="checkbox"
-                name="vehicle-type"
-                value="coupe"
-                checked
-              />
-              Coupe
-            </label>
-            <label style="display: block; margin-bottom: 0.5rem">
-              <input
-                type="checkbox"
-                name="vehicle-type"
-                value="electric"
-                checked
-              />
-              Electric
-            </label>
-          </div>
+<div style="margin-bottom: 1.5rem">
+    <label style="display: block; margin-bottom: 0.5rem">
+        <input type="checkbox" name="vehicle-type" value="minivan" checked />
+        Minivan
+    </label>
+    <label style="display: block; margin-bottom: 0.5rem">
+        <input type="checkbox" name="vehicle-type" value="coupe" checked />
+        Coupe
+    </label>
+</div>
 
           <h4>Price Range</h4>
           <div style="margin-bottom: 1.5rem">
             <input
               type="range"
               min="0"
-              max="200000"
-              value="200000"
+              max="2000000"
+              value="2000000"
               id="priceRange"
               style="width: 100%"
             />
@@ -1411,696 +1388,575 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script>
-      // Sample car data (will be replaced with DB data in production)
-      const carsData = [
-        {
-          id: "bmw-7-series",
-          make: "BMW",
-          model: "7 Series",
-          year: 2023,
-          price: 68900,
-          mileage: "12k mi",
-          transmission: "Automatic",
-          mpg: "22 MPG",
-          horsepower: "335 HP",
-          type: "Sedan",
-          image:
-            "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-        },
-        {
-          id: "porsche-911",
-          make: "Porsche",
-          model: "911",
-          year: 2022,
-          price: 112500,
-          mileage: "8k mi",
-          transmission: "Automatic",
-          mpg: "20 MPG",
-          horsepower: "443 HP",
-          type: "Coupe",
-          image:
-            "https://images.unsplash.com/photo-1493238792000-8113da705763?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-        },
-        {
-          id: "range-rover",
-          make: "Range Rover",
-          model: "Sport",
-          year: 2023,
-          price: 79800,
-          mileage: "15k mi",
-          transmission: "Automatic",
-          mpg: "19 MPG",
-          horsepower: "395 HP",
-          type: "SUV",
-          image:
-            "https://images.unsplash.com/photo-1547038577-da80abbc4f19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1555&q=80",
-        },
-        {
-          id: "audi-rs7",
-          make: "Audi",
-          model: "RS7 Sportback",
-          year: 2023,
-          price: 114000,
-          mileage: "5k mi",
-          transmission: "Automatic",
-          mpg: "18 MPG",
-          horsepower: "591 HP",
-          type: "Sedan",
-          image:
-            "https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-        },
-        {
-          id: "mercedes-s-class",
-          make: "Mercedes-Benz",
-          model: "S-Class",
-          year: 2023,
-          price: 111000,
-          mileage: "7k mi",
-          transmission: "Automatic",
-          mpg: "24 MPG",
-          horsepower: "429 HP",
-          type: "Sedan",
-          image:
-            "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-        },
-        {
-          id: "tesla-model-s",
-          make: "Tesla",
-          model: "Model S Plaid",
-          year: 2023,
-          price: 108000,
-          mileage: "3k mi",
-          transmission: "Automatic",
-          range: "396 mi",
-          horsepower: "1,020 HP",
-          type: "Electric",
-          image:
-            "https://images.unsplash.com/photo-1616788494707-ec28f08d05a1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-        },
-        {
-          id: "porsche-taycan",
-          make: "Porsche",
-          model: "Taycan Turbo S",
-          year: 2023,
-          price: 186000,
-          mileage: "6k mi",
-          transmission: "Automatic",
-          range: "212 mi",
-          horsepower: "750 HP",
-          type: "Electric",
-          image:
-            "https://images.unsplash.com/photo-1617531653332-bd46c24f2068?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1515&q=80",
-        },
-        {
-          id: "audi-q8",
-          make: "Audi",
-          model: "Q8",
-          year: 2023,
-          price: 85500,
-          mileage: "9k mi",
-          transmission: "Automatic",
-          mpg: "21 MPG",
-          horsepower: "335 HP",
-          type: "SUV",
-          image:
-            "https://images.unsplash.com/photo-1542362567-b07e54358753?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-        },
-        {
-          id: "bmw-x5",
-          make: "BMW",
-          model: "X5",
-          year: 2023,
-          price: 72300,
-          mileage: "11k mi",
-          transmission: "Automatic",
-          mpg: "23 MPG",
-          horsepower: "335 HP",
-          type: "SUV",
-          image:
-            "https://images.unsplash.com/photo-1555215278-0d9faca8b5a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-        },
-      ];
+  <script>
+// Wait for DOM to be fully loaded before executing
+document.addEventListener("DOMContentLoaded", function() {
+    // DOM Elements
+    const carsGrid = document.getElementById("carsGrid");
+    const searchInput = document.getElementById("searchInput");
+    const sortBy = document.getElementById("sortBy");
+    const filterBtn = document.getElementById("filterBtn");
+    const inventoryCount = document.querySelector(".inventory-count");
+    const carModal = document.getElementById("carModal");
+    const modalBody = document.getElementById("modalBody");
+    const filterModal = document.getElementById("filterModal");
+    const modalCloseButtons = document.querySelectorAll(".modal-close");
+    const priceRange = document.getElementById("priceRange");
+    const priceRangeValue = document.getElementById("priceRangeValue");
+    const applyFiltersBtn = document.getElementById("applyFilters");
+    const resetFiltersBtn = document.getElementById("resetFilters");
+    const authModal = document.getElementById("authModal"); // Added authModal
 
-      // Car details data
-      const carDetails = {
-        "bmw-7-series": {
-          title: "BMW 7 Series",
-          year: "2023",
-          price: "₦68,900",
-          image:
-            "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-          specs: [
-            { label: "Make", value: "BMW" },
-            { label: "Model", value: "7 Series" },
-            { label: "Year", value: "2023" },
-            { label: "Mileage", value: "12,000 miles" },
-            { label: "Transmission", value: "Automatic" },
-            { label: "Engine", value: "3.0L Turbocharged I6" },
-            { label: "Horsepower", value: "335 HP" },
-            { label: "MPG", value: "22 City / 29 Highway" },
-            { label: "Drivetrain", value: "Rear-Wheel Drive" },
-            { label: "Exterior Color", value: "Mineral White Metallic" },
-            { label: "Interior Color", value: "Black Vernasca Leather" },
-          ],
-          features: [
-            "Panoramic Sunroof",
-            "Heated Front Seats",
-            "Apple CarPlay",
-            "Android Auto",
-            "Wireless Charging",
-            "Head-Up Display",
-            "Parking Assistant",
-            "Harman Kardon Sound System",
-            "LED Headlights",
-            "Power Trunk",
-          ],
-        },
-        "porsche-911": {
-          title: "Porsche 911",
-          year: "2022",
-          price: "₦112,500",
-          image:
-            "https://images.unsplash.com/photo-1493238792000-8113da705763?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-          specs: [
-            { label: "Make", value: "Porsche" },
-            { label: "Model", value: "911 Carrera S" },
-            { label: "Year", value: "2022" },
-            { label: "Mileage", value: "8,000 miles" },
-            { label: "Transmission", value: "8-Speed PDK Automatic" },
-            { label: "Engine", value: "3.0L Twin-Turbo Flat-6" },
-            { label: "Horsepower", value: "443 HP" },
-            { label: "MPG", value: "18 City / 24 Highway" },
-            { label: "Drivetrain", value: "Rear-Wheel Drive" },
-            { label: "Exterior Color", value: "GT Silver Metallic" },
-            { label: "Interior Color", value: "Black Leather" },
-          ],
-          features: [
-            "Sport Chrono Package",
-            "Porsche Active Suspension Management",
-            '20" Carrera S Wheels',
-            "Bose Surround Sound System",
-            "Sport Exhaust System",
-            "LED Matrix Headlights",
-            "Power Sport Seats",
-            "Porsche Torque Vectoring",
-            "Rear Axle Steering",
-            "Porsche Stability Management",
-          ],
-        },
-        "range-rover": {
-          title: "Range Rover Sport",
-          year: "2023",
-          price: "₦79,800",
-          image:
-            "https://images.unsplash.com/photo-1547038577-da80abbc4f19?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1555&q=80",
-          specs: [
-            { label: "Make", value: "Land Rover" },
-            { label: "Model", value: "Range Rover Sport" },
-            { label: "Year", value: "2023" },
-            { label: "Mileage", value: "15,000 miles" },
-            { label: "Transmission", value: "8-Speed Automatic" },
-            { label: "Engine", value: "3.0L Supercharged V6" },
-            { label: "Horsepower", value: "395 HP" },
-            { label: "MPG", value: "17 City / 23 Highway" },
-            { label: "Drivetrain", value: "All-Wheel Drive" },
-            { label: "Exterior Color", value: "Fuji White" },
-            { label: "Interior Color", value: "Ebony Windsor Leather" },
-          ],
-          features: [
-            "Terrain Response System",
-            "Adaptive Dynamics",
-            '21" Alloy Wheels',
-            "Meridian Sound System",
-            "Panoramic Roof",
-            "Keyless Entry",
-            "Heated Steering Wheel",
-            "360° Parking Aid",
-            "Adaptive Cruise Control",
-            "Lane Keep Assist",
-          ],
-        },
-        "mercedes-e-class": {
-          title: "Mercedes E-Class",
-          year: "2021",
-          price: "₦62,500",
-          image:
-            "https://images.unsplash.com/photo-1562911791-c7a97b729ec5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80",
-          specs: [
-            { label: "Make", value: "Mercedes" },
-            { label: "Model", value: "E-Class" },
-            { label: "Year", value: "2021" },
-            { label: "Mileage", value: "18,000 miles" },
-            { label: "Transmission", value: "Automatic" },
-            { label: "Engine", value: "2.0L Turbo Diesel" },
-            { label: "Horsepower", value: "255 HP" },
-            { label: "MPG", value: "32 City / 42 Highway" },
-            { label: "Drivetrain", value: "Rear-Wheel Drive" },
-            { label: "Exterior Color", value: "Obsidian Black" },
-            { label: "Interior Color", value: "Black Leather" },
-          ],
-          features: [
-            "MBUX Infotainment System",
-            "Panoramic Sunroof",
-            "Heated Front Seats",
-            "Apple CarPlay",
-            "Android Auto",
-            "Wireless Charging",
-            "Head-Up Display",
-            "Burmester Sound System",
-            "LED Headlights",
-            "Power Trunk",
-          ],
-        },
-        "audi-a6": {
-          title: "Audi A6",
-          year: "2020",
-          price: "₦58,700",
-          image:
-            "https://images.unsplash.com/photo-1555215695-3004980ad54e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
-          specs: [
-            { label: "Make", value: "Audi" },
-            { label: "Model", value: "A6" },
-            { label: "Year", value: "2020" },
-            { label: "Mileage", value: "22,000 miles" },
-            { label: "Transmission", value: "Automatic" },
-            { label: "Engine", value: "2.0L Turbocharged I4" },
-            { label: "Horsepower", value: "248 HP" },
-            { label: "MPG", value: "24 City / 32 Highway" },
-            { label: "Drivetrain", value: "All-Wheel Drive" },
-            { label: "Exterior Color", value: "Ibiza White" },
-            { label: "Interior Color", value: "Black Leather" },
-          ],
-          features: [
-            "Virtual Cockpit",
-            "Panoramic Sunroof",
-            "Heated Front Seats",
-            "Apple CarPlay",
-            "Android Auto",
-            "Wireless Charging",
-            "Head-Up Display",
-            "Bang & Olufsen Sound System",
-            "LED Headlights",
-            "Power Trunk",
-          ],
-        },
-        "tesla-model3": {
-          title: "Tesla Model 3",
-          year: "2022",
-          price: "₦72,500",
-          image:
-            "https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1387&q=80",
-          specs: [
-            { label: "Make", value: "Tesla" },
-            { label: "Model", value: "Model 3" },
-            { label: "Year", value: "2022" },
-            { label: "Mileage", value: "9,000 miles" },
-            { label: "Transmission", value: "Automatic" },
-            { label: "Engine", value: "Electric" },
-            { label: "Horsepower", value: "283 HP" },
-            { label: "Range", value: "272 miles" },
-            { label: "Drivetrain", value: "Rear-Wheel Drive" },
-            { label: "Exterior Color", value: "Midnight Silver" },
-            { label: "Interior Color", value: "Black Vegan Leather" },
-          ],
-          features: [
-            '15" Touchscreen Display',
-            "Autopilot",
-            "Heated Front Seats",
-            "Wireless Phone Charging",
-            "Premium Audio System",
-            "Keyless Entry",
-            "Power Trunk",
-            "LED Headlights",
-            "All Glass Roof",
-            "Supercharger Capable",
-          ],
-        },
-      };
+    // Current filters state
+    let currentFilters = {
+        search: '',
+        sort: 'featured',
+        minPrice: 0,
+        maxPrice: 5000000, // 5 million Naira
+        types: [],
+        minYear: 0,
+        mileage: ''
+    };
 
-      // DOM Elements
-      const carsGrid = document.getElementById("carsGrid");
-      const searchInput = document.getElementById("searchInput");
-      const sortBy = document.getElementById("sortBy");
-      const filterBtn = document.getElementById("filterBtn");
-      const inventoryCount = document.querySelector(".inventory-count");
-      const carModal = document.getElementById("carModal");
-      const modalBody = document.getElementById("modalBody");
-      const filterModal = document.getElementById("filterModal");
-      const modalCloseButtons = document.querySelectorAll(".modal-close");
+    // Initialize filters and UI
+    function initializeFilters() {
+        // Initialize price range slider if elements exist
+        if (priceRange && priceRangeValue) {
+            priceRange.min = 0;
+            priceRange.max = 5000000;
+            priceRange.value = 5000000;
+            priceRangeValue.textContent = "₦5,000,000";
+        } else {
+            console.error("Price range elements not found");
+        }
 
-      // Initialize the page when loaded
-      document.addEventListener("DOMContentLoaded", function () {
-        renderCars(carsData);
-        updateInventoryCount(carsData.length);
-        setupEventListeners();
-      });
+        // Initialize other filter UI elements with null checks
+        const yearSelect = document.querySelector('#filterModal select:nth-of-type(1)');
+        const mileageSelect = document.querySelector('#filterModal select:nth-of-type(2)');
 
-      // Render cars to the grid
-      function renderCars(cars) {
+        if (yearSelect) yearSelect.value = 'any';
+        if (mileageSelect) mileageSelect.value = 'any';
+    }
+
+    // Fetch cars and update types dynamically
+    function fetchCars() {
+        showLoading(true);
+
+        const params = new URLSearchParams();
+        params.append('search', currentFilters.search);
+        params.append('sort', currentFilters.sort);
+        params.append('min_price', currentFilters.minPrice);
+        params.append('max_price', currentFilters.maxPrice);
+        if (currentFilters.types.length > 0) {
+            params.append('types', currentFilters.types.join(','));
+        }
+        params.append('min_year', currentFilters.minYear);
+        params.append('mileage', currentFilters.mileage);
+        params.append('debug', 'true');
+
+          fetch(`./inventory_api.php?${params.toString()}`)
+            .then(response => {
+                if (!response.ok) throw new Error('Network error');
+                return response.json();
+            })
+            .then(data => {
+                console.log("API response:", data);
+                if (data.success) {
+                    renderCars(data.data);
+                    updateInventoryCount(data.data.length, data.total);
+
+                    // Update filter UI with actual types
+                    if (data.data && data.data.length > 0) {
+                        updateTypeFilters(data.data);
+                    }
+                } else {
+                    showError(data.message || 'Failed to load cars');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showError('Failed to load cars. Please try again.');
+            })
+            .finally(() => {
+                showLoading(false);
+            });
+    }
+
+    // Update type filters based on actual data
+    function updateTypeFilters(cars) {
+        const uniqueTypes = [...new Set(cars.map(car => car.type))].filter(Boolean);
+        const typeContainer = document.querySelector('#filterModal .type-filter-container') ||
+                             document.querySelector('#filterModal div[style="margin-bottom: 1.5rem"]');
+
+        if (uniqueTypes.length > 0 && typeContainer) {
+            typeContainer.innerHTML = '<h4>Vehicle Type</h4>';
+            currentFilters.types = uniqueTypes; // Update current filters
+
+            uniqueTypes.forEach(type => {
+                const checkboxId = `type-${type.toLowerCase().replace(/\s+/g, '-')}`;
+                typeContainer.innerHTML += `
+                    <label style="display: block; margin-bottom: 0.5rem">
+                        <input type="checkbox" name="vehicle-type" value="${type}" id="${checkboxId}" checked />
+                        ${type}
+                    </label>
+                `;
+            });
+        }
+    }
+
+   function showLoading(show) {
+    if (carsGrid) {
+        if (show) {
+            // Only show loading if there's no content yet
+            if (!carsGrid.querySelector('.car-card')) {
+                carsGrid.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Loading cars...</div>';
+            }
+        } else {
+            const loadingSpinner = carsGrid.querySelector('.loading-spinner');
+            if (loadingSpinner) {
+                loadingSpinner.remove();
+            }
+        }
+    }
+}
+
+    // Show error message
+    function showError(message) {
+        if (carsGrid) {
+            carsGrid.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-circle"></i> ${message}</div>`;
+        }
+    }
+
+    // Render cars to the grid
+    function renderCars(cars, total) {
+        if (!carsGrid) return;
         carsGrid.innerHTML = "";
 
         if (cars.length === 0) {
-          carsGrid.innerHTML =
-            '<p style="grid-column: 1/-1; text-align: center;">No cars match your search criteria.</p>';
-          return;
+            let message = '';
+            if (total > 0) {
+                message = `<div style="grid-column: 1/-1; text-align: center; padding: 2rem;">
+                    <h3>No cars match your current filters</h3>
+                    <p>We found ${total} available cars, but none match your filter criteria.</p>
+                    <button onclick="resetFilters()" class="btn btn-secondary" style="margin-top: 1rem;">
+                        Reset All Filters
+                    </button>
+                </div>`;
+            } else {
+                message = '<p style="grid-column: 1/-1; text-align: center;">No cars available in inventory at this time.</p>';
+            }
+            carsGrid.innerHTML = message;
+            return;
         }
 
         cars.forEach((car) => {
-          const carCard = document.createElement("div");
-          carCard.className = "car-card";
+            const carCard = document.createElement("div");
+            carCard.className = "car-card";
 
-          // Determine which icon to use for fuel type
-          const fuelIcon =
-            car.type === "Electric" ? "fas fa-bolt" : "fas fa-gas-pump";
-          const fuelText = car.type === "Electric" ? "Electric" : car.mpg;
+            const fuelIcon = car.type && car.type.toLowerCase() === "electric" ? "fas fa-bolt" : "fas fa-gas-pump";
+            const fuelText = car.type && car.type.toLowerCase() === "electric" ? "Electric" : (car.mpg ? `${car.mpg} MPG` : 'N/A');
 
-          carCard.innerHTML = `
-              <img src="${car.image}" alt="${car.make} ${
-            car.model
-          }" class="car-img">
-              <div class="car-content">
-                  <div class="car-meta">
-                      <span>${car.year}</span>
-                      <span>${car.transmission}</span>
-                      <span>${car.mileage}</span>
-                  </div>
-                  <h3 class="car-title">${car.make} ${car.model}</h3>
-                  <div class="car-specs">
-                      <div class="car-spec">
-                          <i class="${fuelIcon}"></i>
-                          <span>${fuelText}</span>
-                      </div>
-                      <div class="car-spec">
-                          <i class="fas fa-tachometer-alt"></i>
-                          <span>${car.horsepower}</span>
-                      </div>
-                      <div class="car-spec">
-                          <i class="fas fa-car"></i>
-                          <span>${car.type}</span>
-                      </div>
-                  </div>
-                  <p class="car-price">₦${car.price.toLocaleString()}</p>
-                  <a href="#" class="btn btn-primary view-details" data-car="${
-                    car.id
-                  }" style="width: 100%;">View Details</a>
-              </div>
-          `;
-          carsGrid.appendChild(carCard);
+            carCard.innerHTML = `
+                <img src="${car.image_url || 'https://via.placeholder.com/300x200?text=No+Image'}" alt="${car.make} ${car.model}" class="car-img">
+                <div class="car-content">
+                    <div class="car-meta">
+                        <span>${car.year || 'N/A'}</span>
+                        <span>${car.transmission || 'N/A'}</span>
+                        <span>${car.mileage ? `${car.mileage.toLocaleString()} mi` : 'N/A'}</span>
+                    </div>
+                    <h3 class="car-title">${car.make} ${car.model}</h3>
+                    <div class="car-specs">
+                        <div class="car-spec">
+                            <i class="${fuelIcon}"></i>
+                            <span>${fuelText}</span>
+                        </div>
+                        <div class="car-spec">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>${car.horsepower ? `${car.horsepower} HP` : 'N/A'}</span>
+                        </div>
+                        <div class="car-spec">
+                            <i class="fas fa-car"></i>
+                            <span>${car.type || 'N/A'}</span>
+                        </div>
+                    </div>
+                    <p class="car-price">₦${car.price ? car.price.toLocaleString() : 'N/A'}</p>
+                    <a href="#" class="btn btn-primary view-details" data-car="${car.id}" style="width: 100%;">View Details</a>
+                </div>
+            `;
+            carsGrid.appendChild(carCard);
         });
 
         bindViewDetailsEvents();
-      }
+    }
 
-      // Update inventory count
-      function updateInventoryCount(count) {
-        inventoryCount.textContent = `Showing ${count} of ${carsData.length} vehicles`;
-      }
+    // Update inventory count
+    function updateInventoryCount(shown, total) {
+        if (inventoryCount) {
+            inventoryCount.textContent = `Showing ${shown} of ${total} vehicles`;
+        }
+    }
 
-      // Bind view details events
-      function bindViewDetailsEvents() {
+    // Bind view details events
+    function bindViewDetailsEvents() {
         document.querySelectorAll(".view-details").forEach((button) => {
-          button.addEventListener("click", function (e) {
-            e.preventDefault();
-            const carId = this.getAttribute("data-car");
-            showCarDetails(carId);
-          });
+            button.addEventListener("click", function(e) {
+                e.preventDefault();
+                const carId = this.getAttribute("data-car");
+                fetchCarDetails(carId);
+            });
         });
-      }
+    }
 
+   function fetchCarDetails(carId) {
+    showLoading(true);
 
-      const authModal = document.getElementById("authModal");
-      const modalCloses = document.querySelectorAll(".modal-close");
+    fetch(`./inventory_api.php?action=get_car&id=${carId}`)
+        .then(response => {
+            if (!response.ok) throw new Error('Network error');
+            return response.json();
+        })
+        .then(data => {
+            if (data.success && data.data) {
+                showCarDetails(data.data);
+            } else {
+                showErrorInModal(data.message || 'Car details not found');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching car details:', error);
+            showErrorInModal('Failed to load car details. Please try again.');
+        })
+        .finally(() => {
+            // Only hide the loading spinner, don't reset the entire cars grid
+            const loadingSpinner = document.querySelector('.loading-spinner');
+            if (loadingSpinner) {
+                loadingSpinner.style.display = 'none';
+            }
+        });
+}
 
-      // Enhanced car details template
-      function showCarDetails(carId) {
-        const car = carDetails[carId];
+    // Show car details in modal
+    function showCarDetails(car) {
+        if (!modalBody) return;
 
-        modalBody.innerHTML = car
-          ? `
-    <div class="car-details">
-      <div class="car-details-left">
-        <div class="car-details-img">
-          <img src="${car.image}" alt="${car.title}" loading="lazy">
-        </div>
-
-        <div class="car-quick-info">
-          <h3>${car.title}</h3>
-          <p class="car-details-price">${car.price}</p>
-
-          <div class="car-meta">
-            <span class="car-meta-item">
-              <i class="fas fa-tachometer-alt"></i> ${car.mileage || "N/A"}
-            </span>
-            <span class="car-meta-item">
-              <i class="fas fa-calendar-alt"></i> ${car.year || "N/A"}
-            </span>
-          </div>
-
-        </div>
-
-          <button id="checkoutBtn" class="btn btn-primary" >
-            Process to Checkout
-          </button>
-
-
-      </div>
-
-      <div class="car-details-right">
-        <div class="car-details-specs">
-          ${car.specs
-            .map(
-              (spec) => `
-            <div class="car-details-spec">
-              <span class="car-details-spec-label">${spec.label}</span>
-              <span>${spec.value}</span>
+        modalBody.innerHTML = `
+            <div class="car-details">
+                <div class="car-details-left">
+                    <div class="car-details-img">
+                        <img src="${car.image_url || 'https://via.placeholder.com/600x400?text=No+Image'}" alt="${car.make} ${car.model}" loading="lazy">
+                    </div>
+                    <div class="car-quick-info">
+                        <h3>${car.make} ${car.model}</h3>
+                        <p class="car-details-price">₦${car.price ? car.price.toLocaleString() : 'N/A'}</p>
+                        <div class="car-meta">
+                            <span class="car-meta-item">
+                                <i class="fas fa-tachometer-alt"></i> ${car.mileage ? `${car.mileage.toLocaleString()} miles` : 'N/A'}
+                            </span>
+                            <span class="car-meta-item">
+                                <i class="fas fa-calendar-alt"></i> ${car.year || 'N/A'}
+                            </span>
+                        </div>
+                    </div>
+                    <button id="checkoutBtn" class="btn btn-primary" data-car-id="${car.id}">
+                        Process to Checkout
+                    </button>
+                </div>
+                <div class="car-details-right">
+                    <div class="car-details-specs">
+                        ${renderCarSpec('Make', car.make)}
+                        ${renderCarSpec('Model', car.model)}
+                        ${renderCarSpec('Year', car.year)}
+                        ${renderCarSpec('Mileage', car.mileage ? `${car.mileage.toLocaleString()} miles` : null)}
+                        ${renderCarSpec('Transmission', car.transmission)}
+                        ${renderCarSpec('Type', car.type)}
+                        ${renderCarSpec('Color', car.color)}
+                        ${renderCarSpec(car.type === 'Electric' ? 'Range' : 'MPG',
+                            car.type === 'Electric' ? (car.range || null) : (car.mpg ? `${car.mpg} MPG` : null))}
+                        ${renderCarSpec('Horsepower', car.horsepower ? `${car.horsepower} HP` : null)}
+                        ${renderCarSpec('Status', car.status ? car.status.charAt(0).toUpperCase() + car.status.slice(1) : null)}
+                    </div>
+                    <div class="car-details-features">
+                        <h3><i class="fas fa-star"></i> Description</h3>
+                        <div class="features-list">
+                            <p>${car.description || 'No description available.'}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-          `
-            )
-            .join("")}
-        </div>
+        `;
 
-        <div class="car-details-features">
-          <h3><i class="fas fa-star"></i> Key Features</h3>
-          <div class="features-list">
-            ${car.features
-              .map(
-                (feature) => `
-              <div class="feature-item">
-                <i class="fas fa-check-circle"></i>
-                <span>${feature}</span>
-              </div>
-            `
-              )
-              .join("")}
-          </div>
-        </div>
-      </div>
-    </div>
-  `
-          : "<p>Details not available for this vehicle.</p>";
-
-        carModal.style.display = "block";
-        document.body.style.overflow = "hidden";
+        if (carModal) {
+            carModal.style.display = "block";
+            document.body.style.overflow = "hidden";
+        }
 
         // Add event listener to checkout button
-        document
-          .getElementById("checkoutBtn")
-          ?.addEventListener("click", () => {
-            checkUserAuth(carId);
-          });
-      }
-
-      // Modal close functionality
-      modalCloses.forEach((btn) => {
-        btn.addEventListener("click", closeAllModals);
-      });
-
-      window.addEventListener("click", (e) => {
-        if (e.target.classList.contains("modal")) {
-          closeAllModals();
-        }
-      });
-
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-          closeAllModals();
-        }
-      });
-
-      function closeAllModals() {
-        [carModal, authModal].forEach((modal) => {
-          modal.style.display = "none";
-        });
-        document.body.style.overflow = "auto";
-      }
-
-      // Auth flow functions
-      function checkUserAuth(carId) {
-        // Show loading state
-        const btn = document.getElementById("checkoutBtn");
-        if (btn) {
-          btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking...';
-          btn.disabled = true;
-        }
-
-        fetch("check_auth.php")
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.authenticated) {
-              proceedToCheckout(carId);
-            } else {
-              showAuthModal(carId);
-            }
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-            showAuthModal(carId);
-          })
-          .finally(() => {
-            if (btn) {
-              btn.innerHTML =
-                '<i class="fas fa-credit-card"></i> Process to Checkout';
-              btn.disabled = false;
-            }
-          });
-      }
-
-      function showAuthModal(carId) {
-        carModal.style.display = "none";
-        authModal.style.display = "block";
-        authModal.dataset.carId = carId;
-      }
-
-      function proceedToCheckout(carId) {
-        window.location.href = `checkout.php?car_id=${carId}`;
-      }
-
-      // Auth button handlers
-      document.getElementById("loginBtn")?.addEventListener("click", () => {
-        window.location.href = `login.php?redirect=${encodeURIComponent(
-          window.location.href
-        )}`;
-      });
-
-      document.getElementById("registerBtn")?.addEventListener("click", () => {
-        window.location.href = `register.php?redirect=${encodeURIComponent(
-          window.location.href
-        )}`;
-      });
-
-      document.getElementById("guestBtn")?.addEventListener("click", () => {
-        const carId = authModal.dataset.carId;
-        closeAllModals();
-        proceedToCheckout(carId);
-      });
-      // Filter cars based on search
-      function filterCars() {
-        const searchTerm = searchInput.value.toLowerCase();
-        const sortValue = sortBy.value;
-
-        let filteredCars = carsData.filter((car) => {
-          return (
-            car.make.toLowerCase().includes(searchTerm) ||
-            car.model.toLowerCase().includes(searchTerm) ||
-            `${car.make} ${car.model}`.toLowerCase().includes(searchTerm)
-          );
-        });
-
-        // Sort cars
-        sortCars(filteredCars, sortValue);
-      }
-
-      // Sort cars based on selected option
-      function sortCars(cars, sortValue) {
-        switch (sortValue) {
-          case "price-low":
-            cars.sort((a, b) => a.price - b.price);
-            break;
-          case "price-high":
-            cars.sort((a, b) => b.price - a.price);
-            break;
-          case "year-new":
-            cars.sort((a, b) => b.year - a.year);
-            break;
-          case "year-old":
-            cars.sort((a, b) => a.year - b.year);
-            break;
-          case "mileage-low":
-            // Extract numeric value from mileage string (e.g., "12k mi" -> 12)
-            cars.sort((a, b) => {
-              const aMileage = parseInt(a.mileage);
-              const bMileage = parseInt(b.mileage);
-              return aMileage - bMileage;
+        const checkoutBtn = document.getElementById("checkoutBtn");
+        if (checkoutBtn) {
+            checkoutBtn.addEventListener("click", () => {
+                const carId = checkoutBtn.getAttribute("data-car-id");
+                checkUserAuth(carId);
             });
-            break;
-          default:
-            // Featured (default) - no sorting
-            break;
+        }
+    }
+
+    // Helper function to render car specs
+    function renderCarSpec(label, value) {
+        if (!value) return '';
+        return `
+            <div class="car-details-spec">
+                <span class="car-details-spec-label">${label}</span>
+                <span>${value}</span>
+            </div>
+        `;
+    }
+
+    // Show error in modal
+    function showErrorInModal(message) {
+        if (modalBody) {
+            modalBody.innerHTML = `<div class="error-message"><i class="fas fa-exclamation-circle"></i> ${message}</div>`;
+        }
+        if (carModal) {
+            carModal.style.display = "block";
+            document.body.style.overflow = "hidden";
+        }
+    }
+
+    // Modal close functionality
+    if (modalCloseButtons) {
+        modalCloseButtons.forEach((btn) => {
+            btn.addEventListener("click", closeAllModals);
+        });
+    }
+
+    window.addEventListener("click", (e) => {
+        if (e.target.classList.contains("modal")) {
+            closeAllModals();
+        }
+    });
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+            closeAllModals();
+        }
+    });
+
+   function closeAllModals() {
+    [carModal, filterModal, authModal].forEach((modal) => {
+        if (modal) modal.style.display = "none";
+    });
+    document.body.style.overflow = "auto";
+
+    // Clear any loading state in the modal
+    if (modalBody) {
+        modalBody.innerHTML = '';
+    }
+}
+
+    // Filter cars based on search and filters
+    function filterCars() {
+        if (searchInput) currentFilters.search = searchInput.value.toLowerCase();
+        if (sortBy) currentFilters.sort = sortBy.value;
+        fetchCars();
+    }
+
+    // Apply filters from modal
+    function applyFiltersFromModal() {
+        // Get selected vehicle types
+        const typeCheckboxes = document.querySelectorAll('input[name="vehicle-type"]:checked');
+        currentFilters.types = Array.from(typeCheckboxes).map(cb => cb.value);
+
+        // Get price range
+        if (priceRange) currentFilters.maxPrice = parseInt(priceRange.value);
+
+        // Get year filter
+        const yearSelect = document.querySelector('#filterModal select:nth-of-type(1)');
+        if (yearSelect) currentFilters.minYear = yearSelect.value === 'any' ? 0 : parseInt(yearSelect.value);
+
+        // Get mileage filter
+        const mileageSelect = document.querySelector('#filterModal select:nth-of-type(2)');
+        if (mileageSelect) currentFilters.mileage = mileageSelect.value === 'any' ? '' : mileageSelect.value;
+
+        if (filterModal) filterModal.style.display = "none";
+        fetchCars();
+    }
+
+    // Reset all filters
+    function resetFilters() {
+        // Reset price range
+        if (priceRange && priceRangeValue) {
+            priceRange.value = 5000000;
+            priceRangeValue.textContent = "₦5,000,000";
         }
 
-        renderCars(cars);
-        updateInventoryCount(cars.length);
-      }
+        // Reset year select
+        const yearSelect = document.querySelector('#filterModal select:nth-of-type(1)');
+        if (yearSelect) yearSelect.value = 'any';
 
-      // Setup event listeners
-      function setupEventListeners() {
-        // Search input
-        searchInput.addEventListener("input", filterCars);
+        // Reset mileage select
+        const mileageSelect = document.querySelector('#filterModal select:nth-of-type(2)');
+        if (mileageSelect) mileageSelect.value = 'any';
+
+        // Reset current filters
+        currentFilters = {
+            search: '',
+            sort: 'featured',
+            minPrice: 0,
+            maxPrice: 5000000,
+            types: [],
+            minYear: 0,
+            mileage: ''
+        };
+
+        // Reset search input
+        if (searchInput) searchInput.value = '';
+
+        // Reset sort dropdown
+        if (sortBy) sortBy.value = 'featured';
+
+        // Check all type checkboxes
+        document.querySelectorAll('input[name="vehicle-type"]').forEach(checkbox => {
+            checkbox.checked = true;
+        });
+
+        fetchCars();
+    }
+
+    // Setup event listeners
+    function setupEventListeners() {
+        // Search input with debounce
+        if (searchInput) {
+            let searchTimeout;
+            searchInput.addEventListener("input", () => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(filterCars, 500);
+            });
+        }
 
         // Sort dropdown
-        sortBy.addEventListener("change", () => {
-          filterCars();
-        });
+        if (sortBy) {
+            sortBy.addEventListener("change", filterCars);
+        }
 
         // Filter button
-        filterBtn.addEventListener("click", () => {
-          filterModal.style.display = "block";
-        });
-
-        // Close modals when clicking X or outside
-        document.addEventListener("click", function (e) {
-          if (
-            e.target.classList.contains("modal-close") ||
-            e.target === carModal ||
-            e.target === filterModal
-          ) {
-            carModal.style.display = "none";
-            filterModal.style.display = "none";
-          }
-        });
-
-        // Apply filters button in filter modal
-        document
-          .getElementById("applyFilters")
-          ?.addEventListener("click", function () {
-            // Implement filter logic here
-            filterModal.style.display = "none";
-          });
-
-        // Reset filters button
-        document
-          .getElementById("resetFilters")
-          ?.addEventListener("click", function () {
-            // Reset all filter inputs
-            document
-              .querySelectorAll('#filterModal input[type="checkbox"]')
-              .forEach((checkbox) => {
-                checkbox.checked = true;
-              });
-            document.getElementById("priceRange").value = 200000;
-            document.getElementById("priceRangeValue").textContent = "₦200,000";
-          });
+        if (filterBtn) {
+            filterBtn.addEventListener("click", () => {
+                if (filterModal) filterModal.style.display = "block";
+            });
+        }
 
         // Price range slider
-        const priceRange = document.getElementById("priceRange");
-        if (priceRange) {
-          priceRange.addEventListener("input", function () {
-            document.getElementById("priceRangeValue").textContent =
-              "₦" + parseInt(this.value).toLocaleString();
-          });
+        if (priceRange && priceRangeValue) {
+            priceRange.addEventListener("input", function() {
+                priceRangeValue.textContent = "₦" + parseInt(this.value).toLocaleString();
+            });
         }
-      }
-    </script>
+
+        // Apply filters button
+        if (applyFiltersBtn) {
+            applyFiltersBtn.addEventListener("click", applyFiltersFromModal);
+        }
+
+        // Reset filters button
+        if (resetFiltersBtn) {
+            resetFiltersBtn.addEventListener("click", resetFilters);
+        }
+    }
+
+   // Auth flow functions
+function checkUserAuth(carId) {
+    const btn = document.getElementById("checkoutBtn");
+    if (btn) {
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking...';
+        btn.disabled = true;
+    }
+
+    fetch("./check_auth.php")
+        .then((response) => {
+            if (!response.ok) throw new Error('Network error');
+            return response.json();
+        })
+        .then((data) => {
+            if (data.authenticated) {
+                proceedToCheckout(carId);
+            } else {
+                showAuthModal(carId);
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            showAuthModal(carId);
+        })
+        .finally(() => {
+            if (btn) {
+                btn.innerHTML = '<i class="fas fa-credit-card"></i> Process to Checkout';
+                btn.disabled = false;
+            }
+        });
+}
+
+function showAuthModal(carId) {
+    if (carModal) carModal.style.display = "none";
+    if (authModal) {
+        // Store car ID in the modal for later use
+        authModal.dataset.carId = carId;
+        authModal.style.display = "block";
+        document.body.style.overflow = "hidden";
+    }
+}
+
+function proceedToCheckout(carId) {
+    // Encode the current URL to return after login/registration
+    const redirectUrl = encodeURIComponent(`./checkout.php?car_id=${carId}`);
+    window.location.href = `./checkout.php?car_id=${carId}&redirect=${redirectUrl}`;
+}
+
+// Setup auth button handlers
+function setupAuthHandlers() {
+    // Login button - redirect to login page with return URL
+    document.getElementById("loginBtn")?.addEventListener("click", () => {
+        const carId = authModal?.dataset.carId;
+        if (carId) {
+            const redirectUrl = encodeURIComponent(`./checkout.php?car_id=${carId}`);
+            window.location.href = `./login.php?redirect=${redirectUrl}`;
+        } else {
+            window.location.href = `./login.php`;
+        }
+    });
+
+    // Register button - redirect to register page with return URL
+    document.getElementById("registerBtn")?.addEventListener("click", () => {
+        const carId = authModal?.dataset.carId;
+        if (carId) {
+            const redirectUrl = encodeURIComponent(`./checkout.php?car_id=${carId}`);
+            window.location.href = `./register.php?redirect=${redirectUrl}`;
+        } else {
+            window.location.href = `./register.php`;
+        }
+    });
+
+    // Guest checkout button
+    document.getElementById("guestBtn")?.addEventListener("click", () => {
+        const carId = authModal?.dataset.carId;
+        closeAllModals();
+        if (carId) {
+            proceedToCheckout(carId);
+        }
+    });
+}
+
+
+    // Initialize the application
+    function init() {
+        initializeFilters();
+        setupEventListeners();
+        fetchCars();
+        setupAuthHandlers();
+    }
+
+    // Start the application
+    init();
+});
+</script>
   </body>
 </html>
